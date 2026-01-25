@@ -11,7 +11,7 @@ module CurrentUser
     header = request.headers["Authorization"]
     token = header.split(" ").last if header
 
-    decoded = JWT::Decoder.call(token)
+    decoded = JsonWebToken.decode(token)
     @current_user = User.find_by(id: decoded["user_id"]) if decoded
   end
 end

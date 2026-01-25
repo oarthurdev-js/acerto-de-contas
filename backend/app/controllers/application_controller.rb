@@ -1,8 +1,6 @@
 class ApplicationController < ActionController::API
   
   before_action :authenticate_request
-  
-  include Authenticable
   include CurrentUser
   include ErrorHandler
 
@@ -14,7 +12,7 @@ class ApplicationController < ActionController::API
 
     begin
       decoded = JsonWebToken.decode(token)
-      @current_user = User.find(decoded["user_id"])
+      @current_user = User.find(decoded["user_id"]) if decoded
     rescue
       render json: {error: "Não autorizado"}, status: :unauthorized unless @current_user
     end
